@@ -1,7 +1,52 @@
-const Search = () => {
-  return (
-    <div>Search</div>
-  )
-}
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import MovieCard from "../components/MovieCard";
 
-export default Search
+const searchURL = import.meta.env.VITE_SEARCH;
+const apiKey = import.meta.env.VITE_API_KEY;
+
+import "./MoviesGrid.css";
+
+const Search = () => {
+  const [searchParams] = useSearchParams();
+  const [movies, setMovies] = useState([]);
+  const query = searchParams.get("q");
+
+  const getSearchedMovies = async (url) => {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) {
+        throw new Error(`Erro na solicitação: ${res.status}`);
+      }
+      const data = await res.json();
+      setMovies(data.results || []);
+    } catch (error) {
+      console.error(error);
+      setMovies([]);
+    }
+  };
+
+  useEffect(() => {
+    if (query) {
+      const searchWithQueryURL = `${searchURL}?${apiKey}&query=${query}`;
+      getSearchedMovies(searchWithQueryURL);
+    }
+  }, [query]);
+
+  return (
+    <div className="container">
+      <h2 className="title">
+        Resultados para: <span className="query-text">{query}</span>
+      </h2>
+      <div className="movies-container">
+        {!movies || movies.length === 0 ? (
+          <p>Carregando...</p>
+        ) : (
+          movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Search;
