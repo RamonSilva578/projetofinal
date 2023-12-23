@@ -19,7 +19,7 @@ const handleSubmit = (e) => {
     <nav id="navbar">
       <h2>
         <Link to="/">
-          <BiCameraMovie /> MoviesLib
+          <BiCameraMovie /> MovieTime
         </Link>
       </h2>
       <form onSubmit={handleSubmit}>

@@ -27,7 +27,7 @@ const Movie = () => {
       style: "currency",
       currency: "USD",
     });
-  }
+  };
 
   useEffect(() => {
     const movieURL = `${moviesURL}${id}?${apiKey}`;
